@@ -1,6 +1,9 @@
 # redux-promise-middleware-actions
 
-Create Redux actions with a `type` and `payload` in a standardized way. Inspired by [redux-actions](https://www.npmjs.com/package/redux-actions) but is simpler and adds support for asynchronous actions (promises).
+[![Build Status](https://img.shields.io/travis/omichelsen/redux-promise-middleware-actions/master.svg)](https://travis-ci.org/omichelsen/redux-promise-middleware-actions)
+[![Coverage Status](https://coveralls.io/repos/omichelsen/redux-promise-middleware-actions/badge.svg?branch=master&service=github)](https://coveralls.io/github/omichelsen/redux-promise-middleware-actions?branch=master)
+
+Create Redux actions with a `type` and `payload` in a standardized way. Inspired by [redux-actions](https://www.npmjs.com/package/redux-actions) but simpler and with special support for asynchronous actions (promises).
 
 Has no dependencies and is tiny (~633 bytes gzipped). First class TypeScript support.
 
