@@ -56,41 +56,47 @@ describe('actions', () => {
       );
     });
 
-    it('should have a pending action prop', () => {
-      assert('pending' in action);
-    });
+    describe('pending', () => {
+      it('should have a pending action prop', () => {
+        assert('pending' in action);
+      });
 
-    it('should output pending action name on toString()', () => {
-      assert.equal(action.pending.toString(), onPending(TYPE));
-    });
-
-    it('should have a fulfilled action prop', () => {
-      assert('fulfilled' in action);
-    });
-
-    it('should output fulfilled action name on toString()', () => {
-      assert.equal(action.fulfilled.toString(), onFulfilled(TYPE));
-    });
-
-    it('should create a fulfilled action with payload', () => {
-      assert.deepEqual(action.fulfilled('payload'), {
-        type: onFulfilled(TYPE),
-        payload: 'payload',
+      it('should output pending action name on toString()', () => {
+        assert.equal(action.pending.toString(), onPending(TYPE));
       });
     });
 
-    it('should have a rejected action prop', () => {
-      assert('rejected' in action);
+    describe('fulfilled', () => {
+      it('should have a fulfilled action prop', () => {
+        assert('fulfilled' in action);
+      });
+
+      it('should output fulfilled action name on toString()', () => {
+        assert.equal(action.fulfilled.toString(), onFulfilled(TYPE));
+      });
+
+      it('should create a fulfilled action with payload', () => {
+        assert.deepEqual(action.fulfilled('payload'), {
+          type: onFulfilled(TYPE),
+          payload: 'payload',
+        });
+      });
     });
 
-    it('should output rejected action name on toString()', () => {
-      assert.equal(action.rejected.toString(), onRejected(TYPE));
-    });
+    describe('rejected', () => {
+      it('should have a rejected action prop', () => {
+        assert('rejected' in action);
+      });
 
-    it('should create a rejected action with payload', () => {
-      assert.deepEqual(action.rejected('error'), {
-        type: onRejected(TYPE),
-        payload: 'error',
+      it('should output rejected action name on toString()', () => {
+        assert.equal(action.rejected.toString(), onRejected(TYPE));
+      });
+
+      it('should create a rejected action with payload', () => {
+        assert.deepEqual(action.rejected('error'), {
+          type: onRejected(TYPE),
+          payload: 'error',
+        });
       });
     });
   });
