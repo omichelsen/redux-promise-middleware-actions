@@ -65,7 +65,10 @@ When you create an asynchronous action you need to return a promise payload. If 
 ```js
 import { createAsyncAction } from 'redux-promise-middleware-actions';
 
-export const fetchData = createAction('FETCH_DATA', () => fetch(...));
+export const fetchData = createAsyncAction('FETCH_DATA', async () => {
+  const res = await fetch(...);
+  return res.json();
+});
 
 dispatch(fetchData()); // { type: 'FETCH_DATA_PENDING' }
 ```
@@ -101,19 +104,19 @@ import { fetchData } from './actions';
 
 export default (state, action) => {
   switch (action.type) {
-    case String(fn.pending):
+    case String(fetchData.pending):
       return {
         ...state,
         pending: true,
       };
-    case String(fn.fulfilled):
+    case String(fetchData.fulfilled):
       return {
         ...state,
         data: action.payload,
         error: undefined,
         pending: false,
       };
-    case String(fn.rejected):
+    case String(fetchData.rejected):
       return {
         ...state,
         error: action.payload,
