@@ -11,16 +11,14 @@ describe('actions', () => {
   const TYPE = 'TEST_ACTION';
 
   describe('createAction', () => {
-    it('should create an action object with type', () => {
-      assert.equal(createAction(TYPE)().type, TYPE);
-    });
-
-    it('should create an action object with no payload', () => {
-      assert.equal(createAction(TYPE)().payload, undefined);
+    it('should create an action object with type and no payload', () => {
+      const action = createAction(TYPE);
+      assert.deepEqual(action(), { type: TYPE });
     });
 
     it('should output action name on toString()', () => {
-      assert.equal(createAction(TYPE).toString(), TYPE);
+      const action = createAction(TYPE);
+      assert.equal(action.toString(), TYPE);
     });
 
     it('should add the input to the payload', () => {
@@ -52,8 +50,28 @@ describe('actions', () => {
     it('should throw on toString()', () => {
       assert.throws(
         () => action.toString(),
-        `Async action ${TYPE} must be handled with pending, fulfilled or rejected`
+        new RegExp(`Async action ${TYPE} must be handled with pending, fulfilled or rejected`)
       );
+    });
+
+    it('should create action with 0 arguments', async () => {
+      const action0 = createAsyncAction(TYPE, () => Promise.resolve(42));
+      assert.equal(await action0().payload, 42);
+    });
+
+    it('should create action with 1 arguments', async () => {
+      const action1 = createAsyncAction(TYPE, (n: number) => Promise.resolve(n));
+      assert.equal(await action1(42).payload, 42);
+    });
+
+    it('should create action with 2 arguments', async () => {
+      const action1 = createAsyncAction(TYPE, (n: number, s: string) => Promise.resolve({ n, s }));
+      assert.deepEqual(await action1(42, 'hello').payload, { n: 42, s: 'hello' });
+    });
+
+    it('should create action with 3 arguments', async () => {
+      const action1 = createAsyncAction(TYPE, (n: number, s: string, b: boolean) => Promise.resolve({ n, s, b }));
+      assert.deepEqual(await action1(42, 'hello', true).payload, { n: 42, s: 'hello', b: true });
     });
 
     describe('pending', () => {

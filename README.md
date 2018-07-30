@@ -16,6 +16,8 @@ Goals of this library:
 * Have statically typed access to all action types - no need to manually add a type suffix like "_PENDING"
 * TypeScript support so asynchronous actions can't be confused for normal synchronous actions
 
+Note: If you are using TypeScript this library requires TypeScript 3. For TypeScript 2 use version 1 of this library.
+
 ## Installation
 
 You need to install this library as well as [redux-promise-middleware](https://www.npmjs.com/package/redux-promise-middleware).
