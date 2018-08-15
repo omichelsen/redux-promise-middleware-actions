@@ -160,3 +160,34 @@ export default (state, action) => {
   }
 };
 ```
+
+### Metadata
+
+You can add metadata to any action by supplying an additional metadata creator function. The metadata creator will receive the same arguments as the payload creator:
+
+#### `createAction(type, payloadCreator, metadataCreator)`
+
+```js
+export const foo = createAction(
+  'FOO',
+  (num) => num,
+  (num) => num + num
+);
+
+dispatch(foo(5)); // { type: 'FOO', meta: 10, payload: 5 }
+```
+
+#### `createAsyncAction(type, payloadCreator, metadataCreator)`
+
+```js
+export const fetchData = createAsyncAction(
+  'FETCH_DATA',
+  (n: number) => fetch(...),
+  (n: number) => ({ n })
+);
+
+dispatch(fetchData(42));
+// { type: 'FETCH_DATA_PENDING', meta: { n: 42 } }
+// { type: 'FETCH_DATA_FULFILLED', meta: { n: 42 }, payload: Promise<...> }
+// { type: 'FETCH_DATA_REJECTED', meta: { n: 42 }, payload: Error(...) }
+```
