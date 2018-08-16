@@ -35,7 +35,7 @@ describe('reducers', () => {
     });
 
     it('should set pending to false on rejected', () => {
-      const state = reducer(undefined, action.rejected());
+      const state = reducer(undefined, action.rejected('err'));
       assert.equal(state.pending, false);
     });
 
