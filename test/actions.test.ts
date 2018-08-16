@@ -4,7 +4,7 @@ import {
   createAsyncAction,
   onFulfilled,
   onPending,
-  onRejected
+  onRejected,
 } from '../src/actions';
 
 describe('actions', () => {
@@ -59,7 +59,6 @@ describe('actions', () => {
         const action = createAction(TYPE, () => undefined, () => ({ asdf: 1234 }));
         assert.deepEqual(action(), {
           type: TYPE,
-          payload: undefined,
           meta: { asdf: 1234 },
         });
       });
@@ -150,6 +149,42 @@ describe('actions', () => {
           payload: 'error',
         });
       });
+    });
+  });
+
+  describe('thunk', () => {
+    const getStateMock = () => 42;
+    const dispatchMock = (action: any) => {
+      if (typeof action === 'function') {
+        return action(dispatchMock, getStateMock);
+      }
+      return action;
+    };
+
+    it('should return a thunk function', () => {
+      const thunk = createAction(
+        'THUNK',
+        (n: number) => (_, getState) => getState() + n
+      );
+      assert(typeof thunk(1) === 'function');
+    });
+
+    it('should dispatch thunk payload', () => {
+      const thunk = createAction(
+        'THUNK',
+        (n: number) => (_, getState) => getState() + n
+      );
+      const result = dispatchMock(thunk(1));
+      assert.equal(result, 43);
+    });
+
+    it('should return a thunk with metadata', () => {
+      const thunk = createAction(
+        'THUNK',
+        (n: number) => (_, getState) => getState() + n,
+        (n: number) => ({ n })
+      );
+      assert(typeof thunk(1) === 'function');
     });
   });
 });

@@ -9,6 +9,22 @@ export interface IAction<Payload, Metadata = undefined> {
   meta?: Metadata;
 }
 
+export type IThunk = (
+  dispatch: (action: any) => any,
+  getState: () => any
+) => any;
+
+export function createAction<Thunk extends IThunk, U extends any[]>(
+  type: string,
+  payloadCreator: (...args: U) => Thunk
+): (...args: U) => Thunk;
+
+export function createAction<Thunk extends IThunk, Metadata, U extends any[]>(
+  type: string,
+  payloadCreator: (...args: U) => Thunk,
+  metadataCreator?: (...args: U) => Metadata
+): (...args: U) => Thunk;
+
 export function createAction(
   type: string
 ): () => IAction<undefined>;
@@ -28,13 +44,22 @@ export function createAction<Payload, Metadata, U extends any[]>(
   type: string,
   payloadCreator?: (...args: U) => Payload,
   metadataCreator?: (...args: U) => Metadata
-): (...args: U) => IAction<Payload, Metadata> {
+) {
   return Object.assign(
-    (...args: U) => ({
-      type,
-      ...(payloadCreator && { payload: payloadCreator(...args) }),
-      ...(metadataCreator && { meta: metadataCreator(...args) }),
-    }),
+    (...args: U) => {
+      const payload = (payloadCreator && payloadCreator(...args));
+      const meta = (metadataCreator && metadataCreator(...args));
+
+      if (typeof payload === 'function') {
+        return payload;
+      }
+
+      return {
+        type,
+        ...(payload && { payload }),
+        ...(meta && { meta }),
+      };
+    },
     { toString: () => type }
   );
 }
