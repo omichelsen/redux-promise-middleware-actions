@@ -11,16 +11,14 @@ describe('actions', () => {
   const TYPE = 'TEST_ACTION';
 
   describe('createAction', () => {
-    it('should create an action object with type', () => {
-      assert.equal(createAction(TYPE)().type, TYPE);
-    });
-
-    it('should create an action object with no payload', () => {
-      assert.equal(createAction(TYPE)().payload, undefined);
+    it('should create an action object with type and no payload', () => {
+      const action = createAction(TYPE);
+      assert.deepEqual(action(), { type: TYPE });
     });
 
     it('should output action name on toString()', () => {
-      assert.equal(createAction(TYPE).toString(), TYPE);
+      const action = createAction(TYPE);
+      assert.equal(action.toString(), TYPE);
     });
 
     it('should add the input to the payload', () => {
@@ -31,6 +29,40 @@ describe('actions', () => {
     it('should execute the action creator and add it to the payload', () => {
       const action = createAction(TYPE, (a: number, b: number) => a + b);
       assert.equal(action(40, 2).payload, 42);
+    });
+
+    describe('metadataCreator', () => {
+      it('should not have metadata', () => {
+        const action = createAction(TYPE, (n: number) => ({ n }));
+        assert.equal('meta' in action(42), false);
+      });
+
+      it('should forward same payload and metadata', () => {
+        const action = createAction(TYPE, (n: number) => ({ n }), (n: number) => ({ n }));
+        assert.deepEqual(action(42), {
+          type: TYPE,
+          payload: { n: 42 },
+          meta: { n: 42 },
+        });
+      });
+
+      it('should have different payload and metadata', () => {
+        const action = createAction(TYPE, (n: number) => ({ n }), () => ({ asdf: 1234 }));
+        assert.deepEqual(action(42), {
+          type: TYPE,
+          payload: { n: 42 },
+          meta: { asdf: 1234 },
+        });
+      });
+
+      it('should have only metadata', () => {
+        const action = createAction(TYPE, () => undefined, () => ({ asdf: 1234 }));
+        assert.deepEqual(action(), {
+          type: TYPE,
+          payload: undefined,
+          meta: { asdf: 1234 },
+        });
+      });
     });
   });
 

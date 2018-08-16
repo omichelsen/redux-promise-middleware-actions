@@ -2,9 +2,10 @@ export const onPending = (type: any) => `${type}_PENDING`;
 export const onFulfilled = (type: any) => `${type}_FULFILLED`;
 export const onRejected = (type: any) => `${type}_REJECTED`;
 
-export interface IAction<Payload> {
+export interface IAction<Payload, Metadata = undefined> {
   type: string;
   payload?: Payload;
+  metadata?: Metadata;
   error?: boolean;
 }
 
@@ -19,36 +20,46 @@ export function createAction(
   type: string
 ): ActionFunction0<IAction<undefined>>;
 
-export function createAction<Payload>(
+export function createAction<Payload, Metadata>(
   type: string,
-  payloadCreator: () => Payload
-): ActionFunction0<IAction<Payload>>;
+  payloadCreator: () => Payload,
+  metadataCreator?: () => Metadata
+): ActionFunction0<IAction<Payload, Metadata>>;
 
-export function createAction<Payload, Arg1>(
+export function createAction<Payload, Metadata, Arg1>(
   type: string,
-  payloadCreator: ActionFunction1<Arg1, Payload>
-): ActionFunction1<Arg1, IAction<Payload>>;
+  payloadCreator: ActionFunction1<Arg1, Payload>,
+  metadataCreator?: ActionFunction1<Arg1, Metadata>
+): ActionFunction1<Arg1, IAction<Payload, Metadata>>;
 
-export function createAction<Payload, Arg1, Arg2>(
+export function createAction<Payload, Metadata, Arg1, Arg2>(
   type: string,
-  payloadCreator: ActionFunction2<Arg1, Arg2, Payload>
+  payloadCreator: ActionFunction2<Arg1, Arg2, Payload>,
+  metadataCreator?: ActionFunction2<Arg1, Arg2, Metadata>
 ): ActionFunction2<Arg1, Arg2, IAction<Payload>>;
 
-export function createAction<Payload, Arg1, Arg2, Arg3>(
+export function createAction<Payload, Metadata, Arg1, Arg2, Arg3>(
   type: string,
-  payloadCreator: ActionFunction3<Arg1, Arg2, Arg3, Payload>
+  payloadCreator: ActionFunction3<Arg1, Arg2, Arg3, Payload>,
+  metadataCreator?: ActionFunction3<Arg1, Arg2, Arg3, Metadata>
 ): ActionFunction3<Arg1, Arg2, Arg3, IAction<Payload>>;
 
-export function createAction<Payload, Arg1, Arg2, Arg3, Arg4>(
+export function createAction<Payload, Metadata, Arg1, Arg2, Arg3, Arg4>(
   type: string,
-  payloadCreator: ActionFunction4<Arg1, Arg2, Arg3, Arg4, Payload>
+  payloadCreator: ActionFunction4<Arg1, Arg2, Arg3, Arg4, Payload>,
+  metadataCreator?: ActionFunction4<Arg1, Arg2, Arg3, Arg4, Metadata>
 ): ActionFunction4<Arg1, Arg2, Arg3, Arg4, IAction<Payload>>;
 
-export function createAction<Payload>(type: string, payloadCreator?: (...args: any[]) => Payload) {
+export function createAction<Payload, Metadata>(
+  type: string,
+  payloadCreator?: (...args: any[]) => Payload,
+  metadataCreator?: (...args: any[]) => Metadata
+) {
   return Object.assign(
     (...args: any[]) => ({
       type,
       ...(payloadCreator && { payload: payloadCreator(...args) }),
+      ...(metadataCreator && { meta: metadataCreator(...args) }),
     }),
     { toString: () => type }
   );
@@ -60,36 +71,46 @@ export interface IAsyncActionFunction<Payload> extends Function {
   rejected: (payload?: any) => IAction<any>;
 }
 
-export function createAsyncAction<Payload>(
+export function createAsyncAction<Payload, Metadata>(
   type: string,
-  payloadCreator: () => Promise<Payload>
-): ActionFunction0<IAction<Promise<Payload>>> & IAsyncActionFunction<Payload>;
+  payloadCreator: () => Promise<Payload>,
+  metadataCreator?: () => Metadata
+): ActionFunction0<IAction<Promise<Payload>, Metadata>> & IAsyncActionFunction<Payload>;
 
-export function createAsyncAction<Payload, Arg1>(
+export function createAsyncAction<Payload, Metadata, Arg1>(
   type: string,
-  payloadCreator: ActionFunction1<Arg1, Promise<Payload>>
-): ActionFunction1<Arg1, IAction<Promise<Payload>>> & IAsyncActionFunction<Payload>;
+  payloadCreator: ActionFunction1<Arg1, Promise<Payload>>,
+  metadataCreator?: ActionFunction1<Arg1, Metadata>
+): ActionFunction1<Arg1, IAction<Promise<Payload>, Metadata>> & IAsyncActionFunction<Payload>;
 
-export function createAsyncAction<Payload, Arg1, Arg2>(
+export function createAsyncAction<Payload, Metadata, Arg1, Arg2>(
   type: string,
-  payloadCreator: ActionFunction2<Arg1, Arg2, Promise<Payload>>
-): ActionFunction2<Arg1, Arg2, IAction<Promise<Payload>>> & IAsyncActionFunction<Payload>;
+  payloadCreator: ActionFunction2<Arg1, Arg2, Promise<Payload>>,
+  metadataCreator?: ActionFunction2<Arg1, Arg2, Metadata>
+): ActionFunction2<Arg1, Arg2, IAction<Promise<Payload>, Metadata>> & IAsyncActionFunction<Payload>;
 
-export function createAsyncAction<Payload, Arg1, Arg2, Arg3>(
+export function createAsyncAction<Payload, Metadata, Arg1, Arg2, Arg3>(
   type: string,
-  payloadCreator: ActionFunction3<Arg1, Arg2, Arg3, Promise<Payload>>
-): ActionFunction3<Arg1, Arg2, Arg3, IAction<Promise<Payload>>> & IAsyncActionFunction<Payload>;
+  payloadCreator: ActionFunction3<Arg1, Arg2, Arg3, Promise<Payload>>,
+  metadataCreator?: ActionFunction3<Arg1, Arg2, Arg3, Metadata>
+): ActionFunction3<Arg1, Arg2, Arg3, IAction<Promise<Payload>, Metadata>> & IAsyncActionFunction<Payload>;
 
-export function createAsyncAction<Payload, Arg1, Arg2, Arg3, Arg4>(
+export function createAsyncAction<Payload, Metadata, Arg1, Arg2, Arg3, Arg4>(
   type: string,
-  payloadCreator: ActionFunction4<Arg1, Arg2, Arg3, Arg4, Promise<Payload>>
-): ActionFunction4<Arg1, Arg2, Arg3, Arg4, IAction<Promise<Payload>>> & IAsyncActionFunction<Payload>;
+  payloadCreator: ActionFunction4<Arg1, Arg2, Arg3, Arg4, Promise<Payload>>,
+  metadataCreator?: ActionFunction4<Arg1, Arg2, Arg3, Arg4, Metadata>
+): ActionFunction4<Arg1, Arg2, Arg3, Arg4, IAction<Promise<Payload>, Metadata>> & IAsyncActionFunction<Payload>;
 
-export function createAsyncAction<Payload>(type: string, payloadCreator?: (...args: any[]) => Payload) {
+export function createAsyncAction<Payload, Metadata>(
+  type: string,
+  payloadCreator?: (...args: any[]) => Promise<Payload>,
+  metadataCreator?: (...args: any[]) => Metadata
+) {
   return Object.assign(
     (...args: any[]) => ({
       type,
       ...(payloadCreator && { payload: payloadCreator(...args) }),
+      ...(metadataCreator && { meta: metadataCreator(...args) }),
     }),
     {
       toString: () => {
