@@ -2,7 +2,7 @@
 
 [![Build Status](https://img.shields.io/travis/omichelsen/redux-promise-middleware-actions/master.svg)](https://travis-ci.org/omichelsen/redux-promise-middleware-actions)
 [![Coverage Status](https://coveralls.io/repos/omichelsen/redux-promise-middleware-actions/badge.svg?branch=master&service=github)](https://coveralls.io/github/omichelsen/redux-promise-middleware-actions?branch=master)
-[![npm bundle size (minified + gzip)](https://img.shields.io/bundlephobia/minzip/redux-promise-middleware-actions.svg)](https://bundlephobia.com/result?p=redux-promise-middleware-actions)
+[![npm bundle size (minified + gzip)](https://img.shields.io/bundlephobia/minzip/redux-promise-middleware-actions.svg)](https://bundlephobia.com/result?p=redux-promise-middleware-actions) [![Greenkeeper badge](https://badges.greenkeeper.io/omichelsen/redux-promise-middleware-actions.svg)](https://greenkeeper.io/)
 
 Create Redux actions with a `type` and `payload` in a standardized way. Inspired by [redux-actions](https://www.npmjs.com/package/redux-actions) but simpler and with special support for asynchronous actions (promises).
 
