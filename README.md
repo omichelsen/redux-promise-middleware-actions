@@ -2,10 +2,11 @@
 
 [![Build Status](https://img.shields.io/travis/omichelsen/redux-promise-middleware-actions/master.svg)](https://travis-ci.org/omichelsen/redux-promise-middleware-actions)
 [![Coverage Status](https://coveralls.io/repos/omichelsen/redux-promise-middleware-actions/badge.svg?branch=master&service=github)](https://coveralls.io/github/omichelsen/redux-promise-middleware-actions?branch=master)
+[![npm bundle size (minified + gzip)](https://img.shields.io/bundlephobia/minzip/redux-promise-middleware-actions.svg)](https://bundlephobia.com/result?p=redux-promise-middleware-actions)
 
 Create Redux actions with a `type` and `payload` in a standardized way. Inspired by [redux-actions](https://www.npmjs.com/package/redux-actions) but simpler and with special support for asynchronous actions (promises).
 
-Has no dependencies and is tiny (~633 bytes gzipped). First class TypeScript support.
+Has no dependencies and is tiny (~680 bytes gzipped). First class TypeScript support.
 
 Works with [redux-promise-middleware](https://www.npmjs.com/package/redux-promise-middleware) to handle asynchronous actions by dispatching `pending`, `fulfilled` and `rejected` events based on the state of the input promise.
 
