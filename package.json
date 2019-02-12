@@ -27,7 +27,7 @@
   "homepage": "https://github.com/omichelsen/redux-promise-middleware-actions#readme",
   "devDependencies": {
     "@types/mocha": "^5.2.5",
-    "@types/node": "^10.12.23",
+    "@types/node": "^11.9.0",
     "mocha": "^5.2.0",
     "nyc": "^13.2.0",
     "ts-node": "^8.0.2",
