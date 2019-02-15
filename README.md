@@ -33,7 +33,7 @@ Include redux-promise-middleware when you create your store:
 import promiseMiddleware from 'redux-promise-middleware';
 
 composeStoreWithMiddleware = applyMiddleware(
-  promiseMiddleware(),
+  promiseMiddleware,
 )(createStore);
 ```
 
