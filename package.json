@@ -25,6 +25,9 @@
     "url": "https://github.com/omichelsen/redux-promise-middleware-actions/issues"
   },
   "homepage": "https://github.com/omichelsen/redux-promise-middleware-actions#readme",
+  "dependencies": {
+    "tslib": "^1.10.0"
+  },
   "devDependencies": {
     "@types/mocha": "^5.2.7",
     "@types/node": "^12.7.2",
