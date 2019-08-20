@@ -19,7 +19,7 @@
     "promise",
     "async"
   ],
-  "author": "actions",
+  "author": "Ole Michelsen",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/omichelsen/redux-promise-middleware-actions/issues"
