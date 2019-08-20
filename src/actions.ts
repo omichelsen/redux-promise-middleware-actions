@@ -24,6 +24,12 @@ export function createAction<Payload, Metadata, U extends any[]>(
   metadataCreator?: (...args: U) => Metadata
 ): (...args: U) => IAction<Payload, Metadata>;
 
+/**
+ * Standard action creator factory.
+ * @param type Action type.
+ * @example
+ * const addTodo = createAction('TODO_ADD', (name) => ({ name }));
+ */
 export function createAction<Payload, Metadata, U extends any[]>(
   type: string,
   payloadCreator?: (...args: U) => Payload,
@@ -45,6 +51,12 @@ export interface IAsyncActionFunction<Payload> extends Function {
   rejected: (payload?: any) => IAction<any>;
 }
 
+/**
+ * Asynchronous action creator factory.
+ * @param type Action type.
+ * @example
+ * const getTodos = createAsyncAction('TODOS_GET', () => fetch('https://todos.com/todos'));
+ */
 export function createAsyncAction<Payload, Metadata, U extends any[]>(
   type: string,
   payloadCreator: (...args: U) => Promise<Payload>,
