@@ -169,7 +169,7 @@ You can add metadata to any action by supplying an additional metadata creator f
 #### `createAction(type, payloadCreator, metadataCreator)`
 
 ```js
-export const foo = createAction(
+const foo = createAction(
   'FOO',
   (num) => num,
   (num) => num + num
@@ -181,7 +181,7 @@ dispatch(foo(5)); // { type: 'FOO', meta: 10, payload: 5 }
 #### `createAsyncAction(type, payloadCreator, metadataCreator)`
 
 ```js
-export const fetchData = createAsyncAction(
+const fetchData = createAsyncAction(
   'FETCH_DATA',
   (n: number) => fetch(...),
   (n: number) => ({ n })
@@ -191,4 +191,24 @@ dispatch(fetchData(42));
 // { type: 'FETCH_DATA_PENDING', meta: { n: 42 } }
 // { type: 'FETCH_DATA_FULFILLED', meta: { n: 42 }, payload: Promise<...> }
 // { type: 'FETCH_DATA_REJECTED', meta: { n: 42 }, payload: Error(...) }
+```
+
+### Custome Type Delimiters
+
+You can specify a different type delimiter for your async actions:
+
+#### `createAsyncAction(type, payloadCreator, metadataCreator, options)`
+
+```js
+const foo = createAsyncAction(
+  'FETCH_DATA',
+  (n: number) => fetch(num),
+  undefined,
+  { promiseTypeDelimiter: '/' }
+);
+
+dispatch(foo());
+// { type: 'FETCH_DATA/PENDING' }
+// { type: 'FETCH_DATA/FULFILLED', payload: ... }
+// { type: 'FETCH_DATA/REJECTED', payload: ... }
 ```

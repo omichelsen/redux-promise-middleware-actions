@@ -151,5 +151,26 @@ describe('actions', () => {
         });
       });
     });
+
+    describe('promiseTypeDelimiter', () => {
+      const actionDelimiter = createAsyncAction(
+        TYPE,
+        (s: string) => Promise.resolve(s),
+        undefined,
+        { promiseTypeDelimiter: '#' }
+      );
+
+      it('should use custom delimiter in pending action type', () => {
+        assert.equal(actionDelimiter.pending.toString(), onPending(TYPE, '#'));
+      });
+
+      it('should use custom delimiter in fulfilled action type', () => {
+        assert.equal(actionDelimiter.fulfilled.toString(), onFulfilled(TYPE, '#'));
+      });
+
+      it('should use custom delimiter in rejected action type', () => {
+        assert.equal(actionDelimiter.rejected.toString(), onRejected(TYPE, '#'));
+      });
+    });
   });
 });

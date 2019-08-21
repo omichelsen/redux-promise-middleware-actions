@@ -1,6 +1,6 @@
-export const onPending = (type: any) => `${type}_PENDING`;
-export const onFulfilled = (type: any) => `${type}_FULFILLED`;
-export const onRejected = (type: any) => `${type}_REJECTED`;
+export const onPending = (type: any, delimiter = '_') => `${type}${delimiter}PENDING`;
+export const onFulfilled = (type: any, delimiter = '_') => `${type}${delimiter}FULFILLED`;
+export const onRejected = (type: any, delimiter = '_') => `${type}${delimiter}REJECTED`;
 
 export interface IAction<Payload, Metadata = undefined> {
   type: string;
@@ -60,7 +60,10 @@ export interface IAsyncActionFunction<Payload> extends Function {
 export function createAsyncAction<Payload, Metadata, U extends any[]>(
   type: string,
   payloadCreator: (...args: U) => Promise<Payload>,
-  metadataCreator?: (...args: U) => Metadata
+  metadataCreator?: (...args: U) => Metadata,
+  options: {
+    promiseTypeDelimiter?: string
+  } = {}
 ) {
   return Object.assign(
     createAction(type, payloadCreator, metadataCreator),
@@ -70,9 +73,9 @@ export function createAsyncAction<Payload, Metadata, U extends any[]>(
       },
     },
     {
-      pending: createAction(onPending(type)),
-      fulfilled: createAction(onFulfilled(type), (payload: Payload) => payload),
-      rejected: createAction(onRejected(type), (payload: any) => payload),
+      pending: createAction(onPending(type, options.promiseTypeDelimiter)),
+      fulfilled: createAction(onFulfilled(type, options.promiseTypeDelimiter), (payload: Payload) => payload),
+      rejected: createAction(onRejected(type, options.promiseTypeDelimiter), (payload: any) => payload),
     }
   );
 }
