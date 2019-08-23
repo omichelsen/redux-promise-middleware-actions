@@ -1,4 +1,4 @@
-import * as assert from 'assert';
+import assert from 'assert';
 import {
   createAction,
   createAsyncAction,
@@ -18,23 +18,23 @@ describe('actions', () => {
 
     it('should output action name on toString()', () => {
       const action = createAction(TYPE);
-      assert.equal(action.toString(), TYPE);
+      assert.strictEqual(action.toString(), TYPE);
     });
 
     it('should add the input to the payload', () => {
       const action = createAction(TYPE, (input: number) => input);
-      assert.equal(action(1234).payload, 1234);
+      assert.strictEqual(action(1234).payload, 1234);
     });
 
     it('should execute the action creator and add it to the payload', () => {
       const action = createAction(TYPE, (a: number, b: number) => a + b);
-      assert.equal(action(40, 2).payload, 42);
+      assert.strictEqual(action(40, 2).payload, 42);
     });
 
     describe('metadataCreator', () => {
       it('should not have metadata', () => {
         const action = createAction(TYPE, (n: number) => ({ n }));
-        assert.equal('meta' in action(42), false);
+        assert.strictEqual('meta' in action(42), false);
       });
 
       it('should forward same payload and metadata', () => {
@@ -70,7 +70,7 @@ describe('actions', () => {
     const action = createAsyncAction(TYPE, (s: string) => Promise.resolve(s));
 
     it('should create an action with correct type', () => {
-      assert.equal(action('x').type, TYPE);
+      assert.strictEqual(action('x').type, TYPE);
     });
 
     it('should create an action with Promise payload', async () => {
@@ -78,7 +78,7 @@ describe('actions', () => {
     });
 
     it('should create an action with correct payload', async () => {
-      assert.equal(await action('x').payload, 'x');
+      assert.strictEqual(await action('x').payload, 'x');
     });
 
     it('should throw on toString()', () => {
@@ -90,12 +90,12 @@ describe('actions', () => {
 
     it('should create action with 0 arguments', async () => {
       const action0 = createAsyncAction(TYPE, () => Promise.resolve(42));
-      assert.equal(await action0().payload, 42);
+      assert.strictEqual(await action0().payload, 42);
     });
 
     it('should create action with 1 arguments', async () => {
       const action1 = createAsyncAction(TYPE, (n: number) => Promise.resolve(n));
-      assert.equal(await action1(42).payload, 42);
+      assert.strictEqual(await action1(42).payload, 42);
     });
 
     it('should create action with 2 arguments', async () => {
@@ -114,7 +114,7 @@ describe('actions', () => {
       });
 
       it('should output pending action name on toString()', () => {
-        assert.equal(action.pending.toString(), onPending(TYPE));
+        assert.strictEqual(action.pending.toString(), onPending(TYPE));
       });
     });
 
@@ -124,7 +124,7 @@ describe('actions', () => {
       });
 
       it('should output fulfilled action name on toString()', () => {
-        assert.equal(action.fulfilled.toString(), onFulfilled(TYPE));
+        assert.strictEqual(action.fulfilled.toString(), onFulfilled(TYPE));
       });
 
       it('should create a fulfilled action with payload', () => {
@@ -141,7 +141,7 @@ describe('actions', () => {
       });
 
       it('should output rejected action name on toString()', () => {
-        assert.equal(action.rejected.toString(), onRejected(TYPE));
+        assert.strictEqual(action.rejected.toString(), onRejected(TYPE));
       });
 
       it('should create a rejected action with payload', () => {
@@ -161,15 +161,15 @@ describe('actions', () => {
       );
 
       it('should use custom delimiter in pending action type', () => {
-        assert.equal(actionDelimiter.pending.toString(), onPending(TYPE, '#'));
+        assert.strictEqual(actionDelimiter.pending.toString(), onPending(TYPE, '#'));
       });
 
       it('should use custom delimiter in fulfilled action type', () => {
-        assert.equal(actionDelimiter.fulfilled.toString(), onFulfilled(TYPE, '#'));
+        assert.strictEqual(actionDelimiter.fulfilled.toString(), onFulfilled(TYPE, '#'));
       });
 
       it('should use custom delimiter in rejected action type', () => {
-        assert.equal(actionDelimiter.rejected.toString(), onRejected(TYPE, '#'));
+        assert.strictEqual(actionDelimiter.rejected.toString(), onRejected(TYPE, '#'));
       });
     });
   });
