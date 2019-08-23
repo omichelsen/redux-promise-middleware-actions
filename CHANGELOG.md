@@ -1,3 +1,12 @@
+# [3.0.0](https://github.com/omichelsen/redux-promise-middleware-actions/compare/v2.2.0...v3.0.0) (2019-08-23)
+
+
+### Features
+
+* **reducer:** add createReducer and better typed action creators ([91a3e28](https://github.com/omichelsen/redux-promise-middleware-actions/commit/91a3e28))
+
+
+
 # [2.2.0](https://github.com/omichelsen/redux-promise-middleware-actions/compare/v2.0.0...v2.2.0) (2019-08-23)
 
 
