@@ -3,7 +3,9 @@
     "tslint:latest"
   ],
   "rules": {
-    "object-literal-sort-keys": [false],
+    "interface-name": false,
+    "interface-over-type-literal": false,
+    "object-literal-sort-keys": false,
     "quotemark": [true, "single"],
     "trailing-comma": [
       true,

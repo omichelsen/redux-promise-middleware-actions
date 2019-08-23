@@ -54,7 +54,7 @@ dispatch(foo(5)); // { type: 'FOO', payload: 5 }
 When handling the action in a reducer, you simply cast the action function to a string to return the type. This ensures type safety (no spelling errors) and you can use code navigation to find all uses of an action.
 
 ```js
-const fooType = String(foo); // 'FOO'
+const fooType = foo.toString(); // 'FOO'
 ```
 
 ### Asynchronous action
@@ -87,48 +87,38 @@ dispacth(fetchData.rejected(err));      // { type: 'FETCH_DATA_REJECTED', payloa
 But normally you only need them when you are writing reducers:
 
 ```js
-case String(fetchData.pending):   // 'FETCH_DATA_PENDING'
-case String(fetchData.fulfilled): // 'FETCH_DATA_FULFILLED'
-case String(fetchData.rejected):  // 'FETCH_DATA_REJECTED'
+case fetchData.pending.toString():   // 'FETCH_DATA_PENDING'
+case fetchData.fulfilled.toString(): // 'FETCH_DATA_FULFILLED'
+case fetchData.rejected.toString():  // 'FETCH_DATA_REJECTED'
 ```
 
 Note that if you try and use the base function in a reducer, an error will be thrown to ensure you are not listening for an action that will never happen:
 
 ```js
-case String(fetchData): // throws an error
+case fetchData.toString(): // throws an error
 ```
 
-### Async reducer
+### Reducer
 
-You can now handle the different events in your reducer by referencing the possible outcome states:
+To create a type safe reducer `createReducer` takes a list of handlers that accept one or more actions and returns the new state.
 
 ```js
-import { fetchData } from './actions';
+import { createAction, createReducer } from 'redux-promise-middleware-actions';
 
-export default (state, action) => {
-  switch (action.type) {
-    case String(fetchData.pending):
-      return {
-        ...state,
-        pending: true,
-      };
-    case String(fetchData.fulfilled):
-      return {
-        ...state,
-        data: action.payload,
-        error: undefined,
-        pending: false,
-      };
-    case String(fetchData.rejected):
-      return {
-        ...state,
-        error: action.payload,
-        pending: false,
-      };
-    default:
-      return state;
-  }
-};
+const sync = createAction('SYNC');
+const async = createAsyncAction('ASYNC', () => Promise.resolve('data'));
+
+const defaultState = {};
+
+const reducer = createReducer(defaultState, (handleAction) => [
+  handleAction(sync, (state) => ({ ...state, data: undefined })),
+  handleAction(async.pending, (state) => ({ ...state, pending: true })),
+  handleAction(async.fulfilled, (state, { payload }) => ({ ...state, pending: false, data: payload })),
+  handleAction(async.rejected, (state, { payload }) => ({ ...state, pending: false, error: payload })),
+]);
+
+reducer(undefined, sync()); //=> { data: undefined }
+reducer(undefined, async()); //=> { pending: true, data: ..., error: ... }
 ```
 
 #### Async reducer helper
@@ -212,3 +202,7 @@ dispatch(foo());
 // { type: 'FETCH_DATA/FULFILLED', payload: ... }
 // { type: 'FETCH_DATA/REJECTED', payload: ... }
 ```
+
+## Acknowledgements
+
+Thanks to [Deox](https://github.com/thebrodmann/deox/) for a lot of inspiration for the TypeScript types.
