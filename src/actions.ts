@@ -2,27 +2,41 @@ export const onPending = (type: any, delimiter = '_') => `${type}${delimiter}PEN
 export const onFulfilled = (type: any, delimiter = '_') => `${type}${delimiter}FULFILLED`;
 export const onRejected = (type: any, delimiter = '_') => `${type}${delimiter}REJECTED`;
 
-export interface IAction<Payload, Metadata = undefined> {
-  type: string;
-  payload?: Payload;
-  error?: boolean;
-  meta?: Metadata;
-}
+export type Action<
+  Type extends string,
+  Payload = undefined,
+  Meta = undefined
+  > = Payload extends undefined
+  ? (Meta extends undefined ? { type: Type } : { type: Type; meta: Meta })
+  : (Payload extends Error
+    ? (Meta extends undefined
+      ? { type: Type; payload: Payload; error: true }
+      : { type: Type; payload: Payload; meta: Meta; error: true })
+    : (Meta extends undefined
+      ? { type: Type; payload: Payload }
+      : { type: Type; payload: Payload; meta: Meta }));
 
-export function createAction(
-  type: string
-): () => IAction<undefined>;
+export type AnyAction = Action<string>;
 
-export function createAction<Payload, U extends any[]>(
-  type: string,
+export type ActionCreator<T extends AnyAction, U extends any[] = any> = {
+  (...args: U): T
+  toString(): T['type']
+};
+
+export function createAction<Type extends string>(
+  type: Type
+): ActionCreator<Action<Type>>;
+
+export function createAction<Type extends string, Payload, U extends any[]>(
+  type: Type,
   payloadCreator: (...args: U) => Payload
-): (...args: U) => IAction<Payload>;
+): ActionCreator<Action<Type, Payload>, U>;
 
-export function createAction<Payload, Metadata, U extends any[]>(
-  type: string,
+export function createAction<Type extends string, Payload, Metadata, U extends any[]>(
+  type: Type,
   payloadCreator: (...args: U) => Payload,
   metadataCreator?: (...args: U) => Metadata
-): (...args: U) => IAction<Payload, Metadata>;
+): ActionCreator<Action<Type, Payload, Metadata>, U>;
 
 /**
  * Standard action creator factory.
@@ -30,11 +44,11 @@ export function createAction<Payload, Metadata, U extends any[]>(
  * @example
  * const addTodo = createAction('TODO_ADD', (name) => ({ name }));
  */
-export function createAction<Payload, Metadata, U extends any[]>(
-  type: string,
+export function createAction<Type extends string, Payload, Metadata, U extends any[]>(
+  type: Type,
   payloadCreator?: (...args: U) => Payload,
   metadataCreator?: (...args: U) => Metadata
-): (...args: U) => IAction<Payload, Metadata> {
+) {
   return Object.assign(
     (...args: U) => ({
       type,
@@ -45,10 +59,14 @@ export function createAction<Payload, Metadata, U extends any[]>(
   );
 }
 
-export interface IAsyncActionFunction<Payload> extends Function {
-  pending: () => IAction<undefined>;
-  fulfilled: (payload: Payload) => IAction<Payload>;
-  rejected: (payload?: any) => IAction<any>;
+export interface AsyncActionCreator<
+  Type extends string,
+  Payload,
+  Metadata
+  > extends ActionCreator<Action<Type, Payload, Metadata>> {
+  pending: ActionCreator<Action<string>>;
+  fulfilled: ActionCreator<Action<string, Payload>>;
+  rejected: ActionCreator<Action<string, Error>>;
 }
 
 /**
@@ -57,11 +75,11 @@ export interface IAsyncActionFunction<Payload> extends Function {
  * @example
  * const getTodos = createAsyncAction('TODOS_GET', () => fetch('https://todos.com/todos'));
  */
-export function createAsyncAction<Payload, Metadata, U extends any[]>(
-  type: string,
+export function createAsyncAction<Type extends string, Payload, Metadata, U extends any[]>(
+  type: Type,
   payloadCreator: (...args: U) => Promise<Payload>,
   metadataCreator?: (...args: U) => Metadata,
-  options: {
+  { promiseTypeDelimiter: delimiter }: {
     promiseTypeDelimiter?: string
   } = {}
 ) {
@@ -73,9 +91,9 @@ export function createAsyncAction<Payload, Metadata, U extends any[]>(
       },
     },
     {
-      pending: createAction(onPending(type, options.promiseTypeDelimiter)),
-      fulfilled: createAction(onFulfilled(type, options.promiseTypeDelimiter), (payload: Payload) => payload),
-      rejected: createAction(onRejected(type, options.promiseTypeDelimiter), (payload: any) => payload),
+      pending: createAction(onPending(type, delimiter)),
+      fulfilled: createAction(onFulfilled(type, delimiter), (payload: Payload) => payload),
+      rejected: createAction(onRejected(type, delimiter), (payload: Error) => payload),
     }
   );
 }

@@ -1,2 +1,2 @@
 export { createAction, createAsyncAction } from './actions';
-export { asyncReducer } from './reducers';
+export { asyncReducer, createReducer } from './reducers';

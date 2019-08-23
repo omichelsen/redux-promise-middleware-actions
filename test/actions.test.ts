@@ -145,9 +145,10 @@ describe('actions', () => {
       });
 
       it('should create a rejected action with payload', () => {
-        assert.deepEqual(action.rejected('error'), {
+        const err = new Error('error');
+        assert.deepEqual(action.rejected(err), {
           type: onRejected(TYPE),
-          payload: 'error',
+          payload: err,
         });
       });
     });
