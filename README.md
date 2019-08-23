@@ -100,12 +100,12 @@ case fetchData.toString(): // throws an error
 
 ### Reducer
 
-To create a type safe reducer `createReducer` takes a list of handlers that accept one or more actions and returns the new state. You can use it with both synchronous and asynchronous action creators.
+To create a type safe reducer, `createReducer` takes a list of handlers that accept one or more actions and returns the new state. You can use it with both synchronous and asynchronous action creators.
 
 #### `createReducer(defaultState, handlerMapsCreator)`
 
 ```js
-import { createAction, createReducer } from 'redux-promise-middleware-actions';
+import { createAsyncAction, createReducer } from 'redux-promise-middleware-actions';
 
 const fetchData = createAsyncAction('GET', () => fetch(...));
 
