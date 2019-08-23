@@ -1,6 +1,6 @@
 {
   "name": "redux-promise-middleware-actions",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Redux action creator for making async actions with redux-promise-middleware",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

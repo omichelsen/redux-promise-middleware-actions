@@ -1,4 +1,4 @@
-# [2.1.0](https://github.com/omichelsen/redux-promise-middleware-actions/compare/v2.0.0...v2.1.0) (2019-08-23)
+# [2.2.0](https://github.com/omichelsen/redux-promise-middleware-actions/compare/v2.0.0...v2.2.0) (2019-08-23)
 
 
 ### Bug Fixes
