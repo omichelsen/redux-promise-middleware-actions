@@ -63,7 +63,7 @@ export interface AsyncActionCreator<
   Type extends string,
   Payload,
   Metadata
-  > extends ActionCreator<Action<Type, Payload, Metadata>> {
+> extends ActionCreator<Action<Type, Promise<Payload>, Metadata>> {
   pending: ActionCreator<Action<string>>;
   fulfilled: ActionCreator<Action<string, Payload>>;
   rejected: ActionCreator<Action<string, Error>>;

@@ -85,7 +85,7 @@ describe('reducers', () => {
 
   describe('asyncReducer', () => {
     const action = createAsyncAction(TYPE, () => Promise.resolve(42));
-    const reducer = asyncReducer(action as any);
+    const reducer = asyncReducer(action);
 
     it('should return default state if unknown action', () => {
       const state = reducer({}, { type: 'UNKNOWN' });
