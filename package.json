@@ -29,6 +29,9 @@
     "url": "https://github.com/omichelsen/redux-promise-middleware-actions/issues"
   },
   "homepage": "https://github.com/omichelsen/redux-promise-middleware-actions#readme",
+  "peerDependencies": {
+    "redux": ">=4"
+  },
   "dependencies": {
     "tslib": "^1.10.0"
   },
@@ -38,6 +41,7 @@
     "conventional-changelog-cli": "^2.0.23",
     "mocha": "^6.2.0",
     "nyc": "^14.1.1",
+    "redux": "^4.0.4",
     "ts-node": "^8.4.1",
     "tslint": "^5.20.0",
     "typescript": "^3.6.3"
