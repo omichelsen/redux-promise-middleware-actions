@@ -37,7 +37,7 @@
     "@types/node": "^12.7.5",
     "conventional-changelog-cli": "^2.0.23",
     "mocha": "^6.2.0",
-    "nyc": "^14.1.1",
+    "nyc": "^15.0.0",
     "ts-node": "^8.4.1",
     "tslint": "^5.20.0",
     "typescript": "^3.6.3"
