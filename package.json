@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "@types/mocha": "^5.2.7",
-    "@types/node": "^12.7.5",
+    "@types/node": "^13.1.0",
     "conventional-changelog-cli": "^2.0.23",
     "mocha": "^6.2.0",
     "nyc": "^14.1.1",
