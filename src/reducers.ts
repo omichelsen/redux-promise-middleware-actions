@@ -8,50 +8,46 @@ export function getType<
 }
 
 export type Handler<
-  TPrevState,
-  TAction,
-  TNextState extends TPrevState = TPrevState
-> = (prevState: TPrevState, action: TAction) => TNextState;
+  TState,
+  TAction
+> = (state: TState, action: TAction) => TState;
 
 export type HandlerMap<
-  TPrevState,
-  TAction extends AnyAction,
-  TNextState extends TPrevState = TPrevState
-> = { [type in TAction['type']]: Handler<TPrevState, TAction, TNextState> };
+  TState,
+  TAction extends AnyAction
+> = { [type in TAction['type']]: Handler<TState, TAction> };
 
 export type InferActionFromHandlerMap<
   THandlerMap extends HandlerMap<any, any>
 > = THandlerMap extends HandlerMap<any, infer T> ? T : never;
 
-export type InferNextStateFromHandlerMap<
-  THandlerMap extends HandlerMap<any, any>
-> = THandlerMap extends HandlerMap<any, any, infer T> ? T : never;
+// export type InferNextStateFromHandlerMap<
+//   THandlerMap extends HandlerMap<any, any>
+// > = THandlerMap extends HandlerMap<infer T, any> ? T : never;
 
-export type CreateHandlerMap<TPrevState> = <
+export type CreateHandlerMap<TState> = <
   TActionCreator extends ActionCreator<AnyAction>,
-  TNextState extends TPrevState,
   TAction extends AnyAction = TActionCreator extends (...args: any[]) => infer T
   ? T
   : never
 >(
   actionCreators: TActionCreator | TActionCreator[],
-  handler: Handler<TPrevState, TAction, TNextState>
-) => HandlerMap<TPrevState, TAction, TNextState>;
+  handler: Handler<TState, TAction>
+) => HandlerMap<TState, TAction>;
 
 export function createHandlerMap<
   TActionCreator extends ActionCreator<AnyAction>,
-  TPrevState,
-  TNextState extends TPrevState,
+  TState,
   TAction extends AnyAction = TActionCreator extends (...args: any[]) => infer T
   ? T
   : never
 >(
   actionCreators: TActionCreator | TActionCreator[],
-  handler: Handler<TPrevState, TAction, TNextState>
+  handler: Handler<TState, TAction>
 ) {
   return (Array.isArray(actionCreators) ? actionCreators : [actionCreators])
     .map(getType)
-    .reduce<HandlerMap<TPrevState, TAction, TNextState>>(
+    .reduce<HandlerMap<TState, TAction>>(
       (acc, type) => {
         acc[type] = handler;
         return acc;
@@ -62,17 +58,17 @@ export function createHandlerMap<
 
 export function createReducer<
   TState,
-  THandlerMap extends HandlerMap<TState, any, any>
+  THandlerMap extends HandlerMap<TState, any>
 >(
   defaultState: TState,
   handlerMapsCreator: (handle: CreateHandlerMap<TState>) => THandlerMap[]
 ) {
-  const handlerMap = Object.assign({}, ...handlerMapsCreator(createHandlerMap));
+  const handlerMap: any = { ...handlerMapsCreator(createHandlerMap) };
 
   return (
     state = defaultState,
     action: InferActionFromHandlerMap<THandlerMap>
-  ): InferNextStateFromHandlerMap<THandlerMap> => {
+  ): TState => {
     const handler = handlerMap[action.type];
 
     return handler ? handler(state, action) : state;

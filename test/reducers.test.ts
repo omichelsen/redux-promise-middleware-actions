@@ -45,6 +45,27 @@ describe('reducers', () => {
       assert.strictEqual(reducer(0, unknown() as any), 0);
     });
 
+    it('should error on invalid state assignment', () => {
+      interface State {
+        name: string;
+      }
+
+      const INITIAL_STATE: State = {
+        name: '',
+      };
+
+      const setName = createAction('SET_NAME', (name: string) => ({ name }));
+
+      const NameReducer = createReducer(INITIAL_STATE, handleAction => [
+        handleAction(setName, (state, action) => ({
+          ...state,
+          asdf: action.payload.name
+        })),
+      ]);
+
+      NameReducer(undefined, { type: 'SET_NAME', payload: {name:'asdf'} })
+    })
+
     describe('createAsyncAction', () => {
       const get = createAsyncAction('GET', (value: string) => Promise.resolve(value));
 
