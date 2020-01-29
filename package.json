@@ -33,7 +33,7 @@
     "tslib": "^1.10.0"
   },
   "devDependencies": {
-    "@types/mocha": "^5.2.7",
+    "@types/mocha": "^7.0.0",
     "@types/node": "^13.1.7",
     "conventional-changelog-cli": "^2.0.31",
     "mocha": "^7.0.0",
