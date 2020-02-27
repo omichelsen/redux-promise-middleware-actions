@@ -36,6 +36,7 @@ composeStoreWithMiddleware = applyMiddleware(
   promiseMiddleware,
 )(createStore);
 ```
+NOTE: This library is *not* yet compatible with the `promiseTypeSuffixes` option of `redux-promise-middleware`
 
 ## Usage
 
