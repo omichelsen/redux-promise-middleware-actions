@@ -30,7 +30,7 @@
   },
   "homepage": "https://github.com/omichelsen/redux-promise-middleware-actions#readme",
   "dependencies": {
-    "tslib": "^1.11.1"
+    "tslib": "^2.0.0"
   },
   "devDependencies": {
     "@types/mocha": "^7.0.2",
