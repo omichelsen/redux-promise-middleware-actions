@@ -2,7 +2,9 @@ import { ActionCreator, AnyAction, AsyncActionCreator } from './actions';
 
 export function getType<
   TActionCreator extends { toString(): string },
-  Type extends string = TActionCreator extends { toString(): infer U } ? U : never
+  Type extends string = TActionCreator extends { toString(): infer U }
+    ? U
+    : never
 >(actionCreator: TActionCreator) {
   return actionCreator.toString() as Type;
 }
@@ -31,8 +33,8 @@ export type CreateHandlerMap<TPrevState> = <
   TActionCreator extends ActionCreator<AnyAction>,
   TNextState extends TPrevState,
   TAction extends AnyAction = TActionCreator extends (...args: any[]) => infer T
-  ? T
-  : never
+    ? T
+    : never
 >(
   actionCreators: TActionCreator | TActionCreator[],
   handler: Handler<TPrevState, TAction, TNextState>
@@ -43,21 +45,18 @@ export function createHandlerMap<
   TPrevState,
   TNextState extends TPrevState,
   TAction extends AnyAction = TActionCreator extends (...args: any[]) => infer T
-  ? T
-  : never
+    ? T
+    : never
 >(
   actionCreators: TActionCreator | TActionCreator[],
   handler: Handler<TPrevState, TAction, TNextState>
 ) {
   return (Array.isArray(actionCreators) ? actionCreators : [actionCreators])
     .map(getType)
-    .reduce<HandlerMap<TPrevState, TAction, TNextState>>(
-      (acc, type) => {
-        acc[type] = handler;
-        return acc;
-      },
-      {} as any
-    );
+    .reduce<HandlerMap<TPrevState, TAction, TNextState>>((acc, type) => {
+      acc[type] = handler;
+      return acc;
+    }, {} as any);
 }
 
 export function createReducer<
@@ -85,11 +84,9 @@ export interface State<Payload> {
   pending?: boolean;
 }
 
-export const asyncReducer = <
-  Type extends string,
-  Payload,
-  Metadata
->(fn: AsyncActionCreator<Type, Payload, Metadata>) => {
+export const asyncReducer = <Type extends string, Payload, Metadata>(
+  fn: AsyncActionCreator<Type, Payload, Metadata>
+) => {
   const defaultState: State<Payload> = {};
 
   return createReducer(defaultState, (handleAction) => [
