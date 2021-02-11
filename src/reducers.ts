@@ -81,6 +81,7 @@ export function createReducer<
 export interface State<Payload> {
   error?: Error;
   data?: Payload;
+  date?: number;
   pending?: boolean;
 }
 
@@ -99,6 +100,7 @@ export const asyncReducer = <Type extends string, Payload, Metadata>(
       pending: false,
       error: undefined,
       data: payload,
+      date: Date.now(),
     })),
     handleAction(fn.rejected, (state, { payload }) => ({
       ...state,

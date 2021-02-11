@@ -79,14 +79,14 @@ describe('reducers', () => {
       ]);
 
       it('should set pending to true', () => {
-        assert.deepEqual(reducer(undefined, get.pending()), {
+        assert.deepStrictEqual(reducer(undefined, get.pending()), {
           ...defaultState,
           pending: true,
         });
       });
 
       it('should set pending to false and sets data', () => {
-        assert.deepEqual(reducer(undefined, get.fulfilled('data')), {
+        assert.deepStrictEqual(reducer(undefined, get.fulfilled('data')), {
           ...defaultState,
           pending: false,
           data: 'data',
@@ -94,11 +94,14 @@ describe('reducers', () => {
       });
 
       it('should set pending to false and sets error', () => {
-        assert.deepEqual(reducer(undefined, get.rejected(new Error('fail'))), {
-          ...defaultState,
-          pending: false,
-          error: new Error('fail'),
-        });
+        assert.deepStrictEqual(
+          reducer(undefined, get.rejected(new Error('fail'))),
+          {
+            ...defaultState,
+            pending: false,
+            error: new Error('fail'),
+          }
+        );
       });
     });
   });
@@ -109,12 +112,12 @@ describe('reducers', () => {
 
     it('should return default state if unknown action', () => {
       const state = reducer({}, { type: 'UNKNOWN' });
-      assert.deepEqual(state, {});
+      assert.deepStrictEqual(state, {});
     });
 
     it('should set pending to true on pending', () => {
       const state = reducer(undefined, action.pending());
-      assert.deepEqual(state, { pending: true });
+      assert.deepStrictEqual(state, { pending: true });
     });
 
     it('should set pending to false on fulfilled', () => {
@@ -125,6 +128,11 @@ describe('reducers', () => {
     it('should set data on fulfilled', () => {
       const state = reducer(undefined, action.fulfilled(42));
       assert.strictEqual(state.data, 42);
+    });
+
+    it('should set date on fulfilled', () => {
+      const state = reducer(undefined, action.fulfilled(42));
+      assert.strictEqual(state.date, Date.now());
     });
 
     it('should set error to undefined on fulfilled', () => {
@@ -142,7 +150,7 @@ describe('reducers', () => {
 
     it('should set error on rejected', () => {
       const state = reducer(undefined, action.rejected(new Error('oops!')));
-      assert.deepEqual(state.error, new Error('oops!'));
+      assert.deepStrictEqual(state.error, new Error('oops!'));
     });
   });
 });
