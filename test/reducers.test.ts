@@ -60,7 +60,7 @@ describe('reducers', () => {
 
       const defaultState = {
         data: '',
-        error: (undefined as unknown) as Error,
+        error: undefined as unknown as Error,
         pending: false,
       };
 
